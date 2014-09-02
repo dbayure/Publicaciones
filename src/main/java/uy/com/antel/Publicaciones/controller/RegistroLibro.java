@@ -1,5 +1,8 @@
 package uy.com.antel.Publicaciones.controller;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -11,51 +14,72 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
+import uy.com.antel.Publicaciones.data.ManejadorBD;
+import uy.com.antel.Publicaciones.model.Editorial;
+import uy.com.antel.Publicaciones.model.Libro;
 import uy.com.antel.formmrree.model.Funcionario;
 
 
 @Stateful
 @Model
 public class RegistroLibro {
-
+	   ManejadorBD mbd = new ManejadorBD();
+		
+	   private Libro newLibro;
 	   @Inject
-	   private Logger log;
-
-	   @Inject
-	   private EntityManager em;
-
-	   @Inject
-	   private Event<Funcionario> funcionarioEventSrc;
-
-	   private Funcionario newFuncionario;
+	   private Event<Libro> LibroEventSrc;
 
 	   @Produces
 	   @Named
-	   public Funcionario getNewFuncionario() {
-	      return newFuncionario;
+	   public Libro getnewLibro() {
+	      return newLibro;
 	   }
 
 	   public void registro() throws Exception {
-	      log.info("Registro " + newFuncionario.getNombre());
-	      em.persist(newFuncionario);
-	      funcionarioEventSrc.fire(newFuncionario);
-	      initNewFuncionario();
+       Connection con = mbd.getConexion();
+       String insLibro = "insert into libros (titulo, fecha, isbn, idEditorial) values (?,?,?,?)";
+       PreparedStatement pstmt = con.prepareStatement(insLibro);
+       pstmt.setString(1, newLibro.getTitulo());
+       pstmt.setDate(1, (java.sql.Date) newLibro.getFecha());
+       pstmt.setString(1, newLibro.getIsbn());
+       pstmt.setInt(1, newLibro.getIdEditorial());
+       int res = pstmt.executeUpdate();
+       System.out.println("filas insertadas" + res);
+	      pstmt.close();
+	      con.close();
+	      LibroEventSrc.fire(newLibro);
+	      initnewLibro();
 	   }
 	   
-	   public void modificar(Funcionario funcionario) throws Exception {
-		   log.info("Modifico " + funcionario);
-		   em.merge(funcionario);
+	   public void modificar(Libro libro) throws Exception {
+	          Connection con = mbd.getConexion();
+	          String updLibro = "update table libros set titulo = ?, isbn = ? where id = ?";
+	          PreparedStatement pstmt = con.prepareStatement(updLibro);
+	          pstmt.setString(1, libro.getTitulo());
+	          pstmt.setString(2, libro.getIsbn());
+	          int res = pstmt.executeUpdate();
+	          System.out.println("filas insertadas" + res);
+		      pstmt.close();
+		      con.close();
+		      LibroEventSrc.fire(newLibro);
+		      initnewLibro();		   
 	   }
 	   
-	   public void eliminar(Long id) throws Exception {
-		   log.info("Elimino " + id);
-		   Funcionario funcionario = em.find(Funcionario.class, id);
-		   em.remove(funcionario);
-		   funcionarioEventSrc.fire(newFuncionario);
+	   public void eliminar(int id) throws Exception {
+	          Connection con = mbd.getConexion();
+	          String delLibro = "delete from libros where id = ?";
+	          PreparedStatement pstmt = con.prepareStatement(delLibro);
+	          pstmt.setInt(1, id);
+	          int res = pstmt.executeUpdate();
+	          System.out.println("filas insertadas" + res);
+		      pstmt.close();
+		      con.close();
+		      LibroEventSrc.fire(newLibro);
+		      initnewLibro();	
 	   }
 
 	   @PostConstruct
-	   public void initNewFuncionario() {
-		   newFuncionario = new Funcionario();
+	   public void initnewLibro() {
+		   newLibro = new Libro();
 	   }
 }

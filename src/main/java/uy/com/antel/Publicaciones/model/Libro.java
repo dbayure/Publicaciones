@@ -1,6 +1,6 @@
 package uy.com.antel.Publicaciones.model;
 
-public class Libro {
+public class Libro extends Publicacion{
 private String isbn;
 
 public String getIsbn() {
