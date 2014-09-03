@@ -6,7 +6,7 @@
    xmlns:p="http://primefaces.org/ui"
    template="/WEB-INF/templates/default.xhtml">
    <ui:define name="content">
-      <h1 style="text-align: center;">Administrarditoriales</h1>
+      <h1 style="text-align: center;">Administrar Editoriales</h1>
 	
 
       <h:form id="form" prependId="false">
@@ -17,45 +17,35 @@
          <h:panelGrid columns="2" >
 
 			<p:outputLabel for="nombre" value="Nombre:" />
-			<p:inputText id="nombre" value="#{newRol.rol}" label="nombre" required="true" />
-			
-			<p:outputLabel for="desc" value="Descripcion:" />
-			<p:inputText id="desc" value="#{newRol.descripcion}" label="descripcion" required="false" />
+			<p:inputText id="nombre" value="#{newEditorial.nombre}" label="nombre" required="true" />
 
 		</h:panelGrid>
          
          <p>            
-            <h:commandButton id="register" action="#{rolBean.registrar}" value="Registrar" style="margin-left: 400px;" />
+            <h:commandButton id="register" action="#{editorialBean.registrar}" value="Registrar" style="margin-left: 400px;" />
          </p>      
-      <h:panelGroup rendered="#{empty rol}">
-         <em>No hay Rol registrado.</em>
+      <h:panelGroup rendered="#{empty editorial}">
+         <em>No hay Entidad registrada.</em>
       </h:panelGroup>
       
-       <p:dataTable id="roles" var="_rol" value="#{roles}" editable="true">
+       <p:dataTable id="editoriales" var="_editorial" value="#{editorial}" editable="true">
        		<f:facet name="header">  
-            	Administrar Rol  
+            	Administrar Editorial  
         	</f:facet>
         	
-        	<p:ajax event="rowEdit" listener="#{rolBean.onEdit}" update=":form:messages" />  
-        	<p:ajax event="rowEditCancel" listener="#{rolBean.onCancel}" update=":form:messages" />  
+        	<p:ajax event="rowEdit" listener="#{editorialBean.onEdit}" update=":form:messages" />  
+        	<p:ajax event="rowEditCancel" listener="#{editorialBean.onCancel}" update=":form:messages" />  
         	 
         	 <p:column headerText="Id" style="width:5%">
-        	 	<h:outputText value="#{_rol.id}" />
+        	 	<h:outputText value="#{_editorial.id}" />
         	 </p:column>
         	 
         	 <p:column headerText="Nombre" style="width:25%">  
                <p:cellEditor>  
-                   <f:facet name="output"><h:outputText value="#{_rol.rol}" /></f:facet>  
-                   <f:facet name="input"><p:inputText id="modelInputRol" value="#{_rol.rol}" style="width:96%" required="true"/></f:facet>  
+                   <f:facet name="output"><h:outputText value="#{_editorial.nombre}" /></f:facet>  
+                   <f:facet name="input"><p:inputText id="modelInputEditorial" value="#{_editorial.nombre}" style="width:96%" required="true"/></f:facet>  
                </p:cellEditor>  
-           	 </p:column>  
-           	 
-        	 <p:column headerText="Descripcion" style="width:25%">  
-               <p:cellEditor>  
-                   <f:facet name="output"><h:outputText value="#{_rol.descripcion}" /></f:facet>  
-                   <f:facet name="input"><p:inputText id="modelInputDesc" value="#{_rol.descripcion}" style="width:96%" required="true"/></f:facet>  
-               </p:cellEditor>  
-           	 </p:column>  
+           	 </p:column>
            	            	 
            	 <p:column style="width:3%">           	 
 	            <p:rowEditor />	         	           
@@ -63,7 +53,7 @@
 	       <!--  -->
 	        <p:column style="width:3%">
 	        	<p:commandLink  id="deleteLink" update=":form" immediate="true" ajax="true"
-	        		styleClass="ui-icon ui-icon-trash" actionListener="#{rolBean.eliminar(_rol.id)}">
+	        		styleClass="ui-icon ui-icon-trash" actionListener="#{editorialBean.eliminar(_editorial.id)}">
 	        	</p:commandLink>	        	
 	        </p:column>
 	        

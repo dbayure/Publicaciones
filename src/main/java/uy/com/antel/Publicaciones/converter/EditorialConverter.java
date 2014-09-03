@@ -12,34 +12,34 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import uy.com.antel.formmrree.model.Sexo;
+import uy.com.antel.Publicaciones.model.Editorial;
 
-@FacesConverter(forClass = Sexo.class, value = "sexoConverter")
-public class PublicacionesConverter implements Converter {
+@FacesConverter(forClass = Editorial.class, value = "editorialConverter")
+public class EditorialConverter implements Converter {
 
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value.trim().equals("")) {
 			value = ((HttpServletRequest) context.getExternalContext().getRequest()).getParameter(component.getClientId()+"_input");
 //			return null;
 		}
-		Sexo sexo = null;
+		Editorial editorial = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();	
-			sexo = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
+			editorial = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
 					+ ":"  + context.getExternalContext().getRequestServerPort() + context.getExternalContext().getRequestContextPath() 
-					+ "/rest/sexos/" + value), Sexo.class);
+					+ "/rest/editoriales/" + value), Editorial.class);
 		}
 		catch(Exception e) {
-			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Sexo no válido"));
+			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Editorial no válida"));
 		}
-		return sexo;
+		return editorial;
 	}
 
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value == null || value.equals("")) {
             return "";
         } else {
-        	return String.valueOf( ((Sexo)value).getId()  );
+        	return String.valueOf( ((Editorial)value).getId());
         }
 	}
 

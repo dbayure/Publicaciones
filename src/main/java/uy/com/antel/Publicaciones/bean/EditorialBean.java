@@ -8,18 +8,20 @@ import javax.inject.Inject;
 
 import org.primefaces.event.RowEditEvent;
 
+import uy.com.antel.Publicaciones.controller.RegistroEditoriales;
+import uy.com.antel.Publicaciones.model.Editorial;
 
 
 @ManagedBean
 @RequestScoped
-public class EditorialesBean {
+public class EditorialBean {
 
 	@Inject
-	private RegistroSexo registroSexo;
+	private RegistroEditoriales registroEditorial;
 	
 	public void registrar() {
 		try {
-			registroSexo.registro();
+			registroEditorial.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -30,31 +32,31 @@ public class EditorialesBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-            Sexo sexo = ((Sexo) event.getObject());
+            Editorial editorial = ((Editorial) event.getObject());
            
             try {
-            	registroSexo.modificar(sexo);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", sexo.getSexo());  
+            	registroEditorial.modificar(editorial);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", editorial.getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", sexo.getSexo());  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", editorial.getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
 	
 	public void onCancel(RowEditEvent event) {  
-        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Sexo) event.getObject()).getSexo());  
+        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Editorial) event.getObject()).getNombre());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
 	
-	public void eliminar(Long id) {
+	public void eliminar(int id) {
 		try {
-			registroSexo.eliminar(id);
-			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
+			registroEditorial.eliminar(id);
+			FacesMessage msg = new FacesMessage("Se eliminó ", Integer.toString(id));  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		catch(Exception e) {
-			FacesMessage msg = new FacesMessage("Error al eliminar", id.toString());  
+			FacesMessage msg = new FacesMessage("Error al eliminar", Integer.toString(id));  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		  

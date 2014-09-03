@@ -2,8 +2,6 @@ package uy.com.antel.Publicaciones.controller;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.Date;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -12,12 +10,9 @@ import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
 
 import uy.com.antel.Publicaciones.data.ManejadorBD;
-import uy.com.antel.Publicaciones.model.Editorial;
 import uy.com.antel.Publicaciones.model.Libro;
-import uy.com.antel.formmrree.model.Funcionario;
 
 
 @Stateful
@@ -27,7 +22,7 @@ public class RegistroLibro {
 		
 	   private Libro newLibro;
 	   @Inject
-	   private Event<Libro> LibroEventSrc;
+	   private Event<Libro> libroEventSrc;
 
 	   @Produces
 	   @Named
@@ -40,14 +35,14 @@ public class RegistroLibro {
        String insLibro = "insert into libros (titulo, fecha, isbn, idEditorial) values (?,?,?,?)";
        PreparedStatement pstmt = con.prepareStatement(insLibro);
        pstmt.setString(1, newLibro.getTitulo());
-       pstmt.setDate(1, (java.sql.Date) newLibro.getFecha());
-       pstmt.setString(1, newLibro.getIsbn());
-       pstmt.setInt(1, newLibro.getIdEditorial());
+       pstmt.setDate(2, (java.sql.Date) newLibro.getFecha());
+       pstmt.setString(3, newLibro.getIsbn());
+       pstmt.setInt(4, newLibro.getIdEditorial());
        int res = pstmt.executeUpdate();
        System.out.println("filas insertadas" + res);
 	      pstmt.close();
 	      con.close();
-	      LibroEventSrc.fire(newLibro);
+	      libroEventSrc.fire(newLibro);
 	      initnewLibro();
 	   }
 	   
@@ -61,7 +56,7 @@ public class RegistroLibro {
 	          System.out.println("filas insertadas" + res);
 		      pstmt.close();
 		      con.close();
-		      LibroEventSrc.fire(newLibro);
+		      libroEventSrc.fire(newLibro);
 		      initnewLibro();		   
 	   }
 	   
@@ -74,7 +69,7 @@ public class RegistroLibro {
 	          System.out.println("filas insertadas" + res);
 		      pstmt.close();
 		      con.close();
-		      LibroEventSrc.fire(newLibro);
+		      libroEventSrc.fire(newLibro);
 		      initnewLibro();	
 	   }
 

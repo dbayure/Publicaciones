@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import uy.com.antel.formmrree.model.Funcionario;
+import uy.com.antel.Publicaciones.model.Revista;
 
-@FacesConverter(forClass = Funcionario.class, value = "funcionarioConverter")
+@FacesConverter(forClass = Revista.class, value = "revistaConverter")
 public class RevistaConverter implements Converter {
 
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
@@ -22,24 +22,24 @@ public class RevistaConverter implements Converter {
 			value = ((HttpServletRequest) context.getExternalContext().getRequest()).getParameter(component.getClientId()+"_input");
 //			return null;
 		}
-		Funcionario func = null;
+		Revista revista = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();	
-			func = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
+			revista = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
 					+ ":"  + context.getExternalContext().getRequestServerPort() + context.getExternalContext().getRequestContextPath() 
-					+ "/rest/funcionarios/" + value), Funcionario.class);
+					+ "/rest/revistas/" + value), Revista.class);
 		}
 		catch(Exception e) {
 			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Funcionario no válido"));
 		}
-		return func;
+		return revista;
 	}
 
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value == null || value.equals("")) {
             return "";
         } else {
-        	return String.valueOf( ((Funcionario)value).getId()  );
+        	return String.valueOf( ((Revista)value).getId()  );
         }
 	}
 

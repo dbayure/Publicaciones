@@ -6,71 +6,64 @@
    xmlns:p="http://primefaces.org/ui"
    template="/WEB-INF/templates/default.xhtml">
    <ui:define name="content">
-      <h1 style="text-align: center;">Administración de Funcionarios</h1>
+      <h1 style="text-align: center;">Administración de Revistas</h1>
 	
 
-      <h:form id="form" prependId="false">
+        <h:form id="form" prependId="false">
          <h2>Registro</h2>
          
          <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />          
          
          <h:panelGrid columns="2" >
 
-			<p:outputLabel for="nombre" value="Nombre:" />
-			<p:inputText id="nombre" value="#{newFuncionario.nombre}" label="nombre" required="true" />
-			<p:outputLabel for="usuario" value="Usuario:" />
-			<p:inputText id="usuario" value="#{newFuncionario.usuario}" label="usuario" required="true" />
-			<p:outputLabel for="pass" value="Contraseña:" />
-			<p:password id="pass" value="#{newFuncionario.password}" label="contraseña" required="true"/>
-			<p:outputLabel for="tel" value="Telefono:" />
-			<p:inputText id="tel" value="#{newFuncionario.telefono}" label="telefono" required="true" />
-			<p:outputLabel for="correo" value="Correo:" />
-			<p:inputText id="correo" value="#{newFuncionario.correo}" label="correo" required="true" />
-			<p:outputLabel for="rol" value="Perfil"/>
-			<p:selectOneMenu id="rol" value="#{newFuncionario.rol}" required="true">
-				<f:converter converterId="rolConverter" />
+			<p:outputLabel for="titulo" value="Titulo:" />
+			<p:inputText id="titulo" value="#{newLibro.titulo}" label="titulo" required="true" />
+			<p:outputLabel for="numero" value="Numero:" />
+			<p:inputText id="numero" value="#{newRevista.numero}" label="numero" required="true" />
+			<p:selectOneMenu id="editorial" value="#{newRevista.idEditorial}" required="true">
+				<f:converter converterId="RevistaConverter" />
 				<f:selectItem itemLabel="Seleccione..." itemValue=""/>
-				<f:selectItems value="#{roles}" var="rol" itemLabel="#{rol.rol}" itemValue="#{rol}"/>
+				<f:selectItems value="#{revistas}" var="revista" itemLabel="#{revista.idEditorial}" itemValue="#{revista}"/>
 			</p:selectOneMenu> 				
 		</h:panelGrid>
          
          <p>            
-            <h:commandButton id="register" action="#{funcionarioBean.registrar}" value="Registrar" style="margin-left: 400px;" />
+            <h:commandButton id="register" action="#{revistaBean.registrar}" value="Registrar" style="margin-left: 400px;" />
          </p>      
-      <h:panelGroup rendered="#{empty funcionario}">
-         <em>No hay Funcionario registrado.</em>
+      <h:panelGroup rendered="#{empty revista">
+         <em>No hay Revista registrada.</em>
       </h:panelGroup>
       
-       <p:dataTable id="funcionarios" var="_func" value="#{funcionario}" editable="true">
+       <p:dataTable id="revista" var="_revista" value="#{revistas}" editable="true">
        		<f:facet name="header">  
-            	Administrar Funcionarios  
+            	Administrar Revistas 
         	</f:facet>
         	
-        	<p:ajax event="rowEdit" listener="#{funcionarioBean.onEdit}" update=":form:messages" />  
-        	<p:ajax event="rowEditCancel" listener="#{funcionarioBean.onCancel}" update=":form:messages" />  
+        	<p:ajax event="rowEdit" listener="#{revistaBean.onEdit}" update=":form:messages" />  
+        	<p:ajax event="rowEditCancel" listener="#{revistaBean.onCancel}" update=":form:messages" />  
         	 
         	 <p:column headerText="Id" style="width:5%">
-        	 	<h:outputText value="#{_func.id}" />
+        	 	<h:outputText value="#{_revista.id}" />
         	 </p:column>
         	 
-        	 <p:column headerText="Nombre" style="width:25%">  
+        	 <p:column headerText="Titulo" style="width:25%">  
                <p:cellEditor>  
-                   <f:facet name="output"><h:outputText value="#{_func.nombre}" /></f:facet>  
-                   <f:facet name="input"><p:inputText id="modelInputNom" value="#{_func.nombre}" style="width:96%" required="true"/></f:facet>  
+                   <f:facet name="output"><h:outputText value="#{_revista.titulo}" /></f:facet>  
+                   <f:facet name="input"><p:inputText id="modelInputNom" value="#{_revista.titulo}" style="width:96%" required="true"/></f:facet>  
                </p:cellEditor>  
            	 </p:column>  
            	 
-        	 <p:column headerText="Usuario" style="width:25%">  
+        	 <p:column headerText="Numero" style="width:25%">  
                <p:cellEditor>  
-                   <f:facet name="output"><h:outputText value="#{_func.usuario}" /></f:facet>  
-                   <f:facet name="input"><p:inputText id="modelInputUser" value="#{_func.usuario}" style="width:96%" required="true"/></f:facet>  
+                   <f:facet name="output"><h:outputText value="#{_revista.numero}" /></f:facet>  
+                   <f:facet name="input"><p:inputText id="modelInputUser" value="#{_revista.numero}" style="width:96%" required="true"/></f:facet>  
                </p:cellEditor>  
            	 </p:column>             	 
            	 
-        	 <p:column headerText="Perfil" style="width:25%">  
+        	 <p:column headerText="Editorial" style="width:25%">  
                <p:cellEditor>  
-                   <f:facet name="output"><h:outputText value="#{_func.rol.rol}" /></f:facet>  
-                   <f:facet name="input"><p:inputText id="modelInputRol" value="#{_func.rol.rol}" style="width:96%" required="true"/></f:facet>  
+                   <f:facet name="output"><h:outputText value="#{_revista.idEditorial}" /></f:facet>  
+                   <f:facet name="input"><p:inputText id="modelInputRevista" value="#{_revista.idEditorial}" style="width:96%" required="true"/></f:facet>  
                </p:cellEditor>  
            	 </p:column>             	 
            	 
@@ -80,7 +73,7 @@
 	       <!--  -->
 	        <p:column style="width:3%">
 	        	<p:commandLink  id="deleteLink" update=":form" immediate="true" ajax="true"
-	        		styleClass="ui-icon ui-icon-trash" actionListener="#{funcionarioBean.eliminar(_func.id)}">
+	        		styleClass="ui-icon ui-icon-trash" actionListener="#{revistaBean.eliminar(_revista.id)}">
 	        	</p:commandLink>	        	
 	        </p:column>
 	        

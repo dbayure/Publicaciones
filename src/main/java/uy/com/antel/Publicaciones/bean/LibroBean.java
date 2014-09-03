@@ -8,17 +8,20 @@ import javax.inject.Inject;
 
 import org.primefaces.event.RowEditEvent;
 
+import uy.com.antel.Publicaciones.controller.RegistroLibro;
+import uy.com.antel.Publicaciones.model.Libro;
+
 
 @ManagedBean
 @RequestScoped
 public class LibroBean {
 
 	@Inject
-	private RegistroEditoriales registroFuncionario;
+	private RegistroLibro registroLibro;
 	
 	public void registrar() {
 		try {
-			registroFuncionario.registro();
+			registroLibro.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -29,31 +32,31 @@ public class LibroBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-            Funcionario funcionario = ((Funcionario) event.getObject());
+            Libro libro = ((Libro) event.getObject());
            
             try {
-            	registroFuncionario.modificar(funcionario);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", funcionario.getUsuario());  
+            	registroLibro.modificar(libro);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", libro.getTitulo());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", funcionario.getUsuario());  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", libro.getTitulo());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
 	
 	public void onCancel(RowEditEvent event) {  
-        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Funcionario) event.getObject()).getUsuario());  
+        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Libro) event.getObject()).getTitulo());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
 	
-	public void eliminar(Long id) {
+	public void eliminar(int id) {
 		try {
-			registroFuncionario.eliminar(id);
-			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
+			registroLibro.eliminar(id);
+			FacesMessage msg = new FacesMessage("Se eliminó ", Integer.toString(id));  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		catch(Exception e) {
-			FacesMessage msg = new FacesMessage("Error al eliminar", id.toString());  
+			FacesMessage msg = new FacesMessage("Error al eliminar", Integer.toString(id));  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		  

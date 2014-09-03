@@ -1,6 +1,7 @@
 package uy.com.antel.Publicaciones.controller;
 
-import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -9,53 +10,72 @@ import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
 
-import uy.com.antel.formmrree.model.Funcionario;
+import uy.com.antel.Publicaciones.data.ManejadorBD;
+import uy.com.antel.Publicaciones.model.Revista;
 
 
 @Stateful
 @Model
 public class RegistroRevista {
 
+	   ManejadorBD mbd = new ManejadorBD();
+		
+	   private Revista newRevista;
 	   @Inject
-	   private Logger log;
-
-	   @Inject
-	   private EntityManager em;
-
-	   @Inject
-	   private Event<Funcionario> funcionarioEventSrc;
-
-	   private Funcionario newFuncionario;
+	   private Event<Revista> revistaEventSrc;
 
 	   @Produces
 	   @Named
-	   public Funcionario getNewFuncionario() {
-	      return newFuncionario;
+	   public Revista getnewRevista() {
+	      return newRevista;
 	   }
 
-	   public void registro() throws Exception {
-	      log.info("Registro " + newFuncionario.getNombre());
-	      em.persist(newFuncionario);
-	      funcionarioEventSrc.fire(newFuncionario);
-	      initNewFuncionario();
+		public void registro() throws Exception {
+	    Connection con = mbd.getConexion();
+	    String insRevista = "insert into revistas (titulo, numero, fecha, idEditorial) values (?,?,?,?)";
+	    PreparedStatement pstmt = con.prepareStatement(insRevista);
+	    pstmt.setString(1, newRevista.getTitulo());
+	    pstmt.setString(2, newRevista.getNumero());
+	    pstmt.setDate(3, (java.sql.Date) newRevista.getFecha());
+	    pstmt.setInt(4, newRevista.getIdEditorial());
+	    int res = pstmt.executeUpdate();
+	    System.out.println("filas insertadas" + res);
+		      pstmt.close();
+		      con.close();
+		      revistaEventSrc.fire(newRevista);
+		      initnewRevista();
+		}
+	   
+	   public void modificar(Revista revista) throws Exception {
+	          Connection con = mbd.getConexion();
+	          String updRevista = "update table revistas set titulo = ?, numero = ? where id = ?";
+	          PreparedStatement pstmt = con.prepareStatement(updRevista);
+	          pstmt.setString(1, revista.getTitulo());
+	          pstmt.setString(2, revista.getNumero());
+	          int res = pstmt.executeUpdate();
+	          System.out.println("filas actualizadas" + res);
+		      pstmt.close();
+		      con.close();
+		      revistaEventSrc.fire(newRevista);
+		      initnewRevista();		   
 	   }
 	   
-	   public void modificar(Funcionario funcionario) throws Exception {
-		   log.info("Modifico " + funcionario);
-		   em.merge(funcionario);
-	   }
-	   
-	   public void eliminar(Long id) throws Exception {
-		   log.info("Elimino " + id);
-		   Funcionario funcionario = em.find(Funcionario.class, id);
-		   em.remove(funcionario);
-		   funcionarioEventSrc.fire(newFuncionario);
+	   public void eliminar(int id) throws Exception {
+	          Connection con = mbd.getConexion();
+	          String delRevista = "delete from revistas where id = ?";
+	          PreparedStatement pstmt = con.prepareStatement(delRevista);
+	          pstmt.setInt(1, id);
+	          int res = pstmt.executeUpdate();
+	          System.out.println("filas eliminadas" + res);
+		      pstmt.close();
+		      con.close();
+		      revistaEventSrc.fire(newRevista);
+		      initnewRevista();	
 	   }
 
 	   @PostConstruct
-	   public void initNewFuncionario() {
-		   newFuncionario = new Funcionario();
+	   public void initnewRevista() {
+		   newRevista = new Revista();
 	   }
 }
