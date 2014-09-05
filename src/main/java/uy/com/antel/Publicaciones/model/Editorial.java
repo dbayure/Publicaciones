@@ -2,6 +2,8 @@ package uy.com.antel.Publicaciones.model;
 
 public class Editorial {
 public int id;
+public String nombre;
+
 public int getId() {
 	return id;
 }
@@ -9,8 +11,6 @@ public int getId() {
 public void setId(int id) {
 	this.id = id;
 }
-
-public String nombre;
 
 public String getNombre() {
 	return nombre;

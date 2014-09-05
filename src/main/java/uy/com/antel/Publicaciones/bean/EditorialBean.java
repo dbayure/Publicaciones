@@ -1,31 +1,50 @@
 package uy.com.antel.Publicaciones.bean;
 
+import java.awt.List;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 import org.primefaces.event.RowEditEvent;
 
 import uy.com.antel.Publicaciones.controller.RegistroEditoriales;
+import uy.com.antel.Publicaciones.data.EditorialListProducer;
 import uy.com.antel.Publicaciones.model.Editorial;
-
 
 @ManagedBean
 @RequestScoped
 public class EditorialBean {
 
-	@Inject
-	private RegistroEditoriales registroEditorial;
+	private RegistroEditoriales registroEditorial = new RegistroEditoriales();
+	public Editorial editorial = new Editorial();
+	public EditorialListProducer elp = new EditorialListProducer();
 	
+	public EditorialListProducer getElp() {
+		return elp;
+	}
+
+	public void setElp(EditorialListProducer elp) {
+		this.elp = elp;
+	}
+
+	public Editorial getEditorial() {
+		return editorial;
+	}
+
+	public void setEditorial(Editorial editorial) {
+		this.editorial = editorial;
+	}
+
 	public void registrar() {
 		try {
-			registroEditorial.registro();
+			registroEditorial.registro(editorial);
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		catch (Exception e) {
+		e.printStackTrace();
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al registrar ", "");  
         FacesContext.getCurrentInstance().addMessage(null, msg); 
 		}

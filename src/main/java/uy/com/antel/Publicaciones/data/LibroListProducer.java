@@ -40,7 +40,7 @@ public class LibroListProducer {
 
    @PostConstruct
    public void retrieveAllOrderedByName() throws SQLException, FileNotFoundException, ClassNotFoundException, IOException, NamingException {
-   	ManejadorBD mbd = new ManejadorBD();
+
    	Connection con = mbd.getConexion();
  	PreparedStatement ps = con.prepareStatement("select l from libros l order by titulo");
   	ResultSet rs = ps.executeQuery();

@@ -17,7 +17,7 @@
          <h:panelGrid columns="2" >
 
 			<p:outputLabel for="nombre" value="Nombre:" />
-			<p:inputText id="nombre" value="#{newEditorial.nombre}" label="nombre" required="true" />
+			<p:inputText id="nombre" value="#{editorialBean.editorial.nombre}" label="nombre" required="true" />
 
 		</h:panelGrid>
          
@@ -25,10 +25,10 @@
             <h:commandButton id="register" action="#{editorialBean.registrar}" value="Registrar" style="margin-left: 400px;" />
          </p>      
       <h:panelGroup rendered="#{empty editorial}">
-         <em>No hay Entidad registrada.</em>
+         <em>No hay Editorial registrada.</em>
       </h:panelGroup>
       
-       <p:dataTable id="editoriales" var="_editorial" value="#{editorial}" editable="true">
+       <p:dataTable id="editoriales" var="_editorial" value="#{editorialBean.elp.editoriales}" editable="true">
        		<f:facet name="header">  
             	Administrar Editorial  
         	</f:facet>

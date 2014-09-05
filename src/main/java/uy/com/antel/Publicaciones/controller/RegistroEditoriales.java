@@ -16,22 +16,11 @@ import uy.com.antel.Publicaciones.model.Editorial;
 
 
 @Stateful
-@Model
 public class RegistroEditoriales {
-		
-	   ManejadorBD mbd = new ManejadorBD();
-	
-	   private Editorial newEditorial;
-	   @Inject
-	   private Event<Editorial> EditorialEventSrc;
 
-	   @Produces
-	   @Named
-	   public Editorial getNewEditorial() {
-	      return newEditorial;
-	   }
+	   public ManejadorBD mbd = new ManejadorBD();
 
-	   public void registro() throws Exception {
+	   public void registro(Editorial newEditorial) throws Exception {
           Connection con = mbd.getConexion();
           String insEditorial = "insert into editoriales (nombre) values (?)";
           PreparedStatement pstmt = con.prepareStatement(insEditorial);
@@ -40,8 +29,6 @@ public class RegistroEditoriales {
           System.out.println("filas insertadas" + res);
 	      pstmt.close();
 	      con.close();
-	      EditorialEventSrc.fire(newEditorial);
-	      initnewEditorial();
 	   }
 	   
 	   public void modificar(Editorial editorial) throws Exception {
@@ -54,8 +41,6 @@ public class RegistroEditoriales {
 	          System.out.println("filas insertadas" + res);
 		      pstmt.close();
 		      con.close();
-		      EditorialEventSrc.fire(newEditorial);
-		      initnewEditorial();		   
 	   }
 	   
 	   public void eliminar(int id) throws Exception {
@@ -67,12 +52,6 @@ public class RegistroEditoriales {
 	          System.out.println("filas insertadas" + res);
 		      pstmt.close();
 		      con.close();
-		      EditorialEventSrc.fire(newEditorial);
-		      initnewEditorial();	
 	   }
 
-	   @PostConstruct
-	   public void initnewEditorial() {
-		   newEditorial = new Editorial();
-	   }
 }

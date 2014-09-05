@@ -13,7 +13,7 @@ public class ManejadorBD {
 	public Connection getConexion() throws FileNotFoundException, IOException, ClassNotFoundException, SQLException, NamingException
 	{
 		InitialContext initContext = new InitialContext();
-		DataSource ds = (DataSource)initContext.lookup("java:PublicacionesDS");
+		DataSource ds = (DataSource)initContext.lookup("java:jboss/datasources/formmrreeDS");
 		Connection con = ds.getConnection();
 		return con;
 	}
