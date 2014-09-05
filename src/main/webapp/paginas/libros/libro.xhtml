@@ -17,13 +17,13 @@
          <h:panelGrid columns="2" >
 
 			<p:outputLabel for="titulo" value="Titulo:" />
-			<p:inputText id="titulo" value="#{newLibro.titulo}" label="titulo" required="true" />
+			<p:inputText id="titulo" value="#{libroBean.libro.titulo}" label="titulo" required="true" />
 			<p:outputLabel for="isbn" value="ISBN:" />
-			<p:inputText id="isbn" value="#{newLibro.isbn}" label="isbn" required="true" />
-			<p:selectOneMenu id="editorial" value="#{newLibro.idEditorial}" required="true">
+			<p:inputText id="isbn" value="#{libroBean.libro.isbn}" label="isbn" required="true" />
+			<p:selectOneMenu id="editorial" value="#{libroBean.libro.idEditorial}" required="true">
 				<f:converter converterId="libroConverter" />
 				<f:selectItem itemLabel="Seleccione..." itemValue=""/>
-				<f:selectItems value="#{libros}" var="libro" itemLabel="#{libro.idEditorial}" itemValue="#{libro}"/>
+				<f:selectItems value="#{libroBean.llp.libros}" var="libro" itemLabel="#{libro.idEditorial}" itemValue="#{libro}"/>
 			</p:selectOneMenu> 				
 		</h:panelGrid>
          

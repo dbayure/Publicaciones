@@ -3,13 +3,7 @@ package uy.com.antel.Publicaciones.controller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Model;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 import uy.com.antel.Publicaciones.data.ManejadorBD;
 import uy.com.antel.Publicaciones.model.Editorial;

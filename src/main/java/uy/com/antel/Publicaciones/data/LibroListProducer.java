@@ -6,43 +6,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Local;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.event.Reception;
-import javax.enterprise.inject.Produces;
-import javax.inject.Named;
 import javax.naming.NamingException;
 
 import uy.com.antel.Publicaciones.model.Libro;
 
 @RequestScoped
-@Local ({LibroListProducer.class, LibroListProducer.class})
 public class LibroListProducer {
 
-   private List<Libro> libros;
+   private List<Libro> libros = new ArrayList<Libro>();
 
    ManejadorBD mbd = new ManejadorBD();
-   
-   @Produces
-   @Named
-   public List<Libro> getLibros() {
-      return libros;
-   }
 
-   public void onListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Libro libro) throws FileNotFoundException, ClassNotFoundException, SQLException, IOException, NamingException {
-	      retrieveAllOrderedByName();
-   }
-
-   @PostConstruct
-   public void retrieveAllOrderedByName() throws SQLException, FileNotFoundException, ClassNotFoundException, IOException, NamingException {
-
-   	Connection con = mbd.getConexion();
- 	PreparedStatement ps = con.prepareStatement("select l from libros l order by titulo");
+public List<Libro> getLibros() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, NamingException {
+	libros.clear();
+	Connection con = mbd.getConexion();
+ 	PreparedStatement ps = con.prepareStatement("select l.* from libros l order by titulo");
   	ResultSet rs = ps.executeQuery();
   	while (rs.next()) 
   	{
@@ -62,5 +45,7 @@ public class LibroListProducer {
    	rs.close();
    	ps.close();
    	con.close();
-   }
+	return libros;
+}
+
 }

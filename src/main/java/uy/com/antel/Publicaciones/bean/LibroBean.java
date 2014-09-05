@@ -4,24 +4,41 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 import org.primefaces.event.RowEditEvent;
 
 import uy.com.antel.Publicaciones.controller.RegistroLibro;
+import uy.com.antel.Publicaciones.data.LibroListProducer;
 import uy.com.antel.Publicaciones.model.Libro;
 
 
 @ManagedBean
 @RequestScoped
 public class LibroBean {
-
-	@Inject
-	private RegistroLibro registroLibro;
 	
+	private RegistroLibro registroLibro = new RegistroLibro();
+	public Libro libro = new Libro();
+	public LibroListProducer llp = new LibroListProducer();
+	
+	public Libro getLibro() {
+		return libro;
+	}
+
+	public void setLibro(Libro libro) {
+		this.libro = libro;
+	}
+
+	public LibroListProducer getLlp() {
+		return llp;
+	}
+
+	public void setLlp(LibroListProducer llp) {
+		this.llp = llp;
+	}
+
 	public void registrar() {
 		try {
-			registroLibro.registro();
+			registroLibro.registro(libro);
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}

@@ -1,7 +1,5 @@
 package uy.com.antel.Publicaciones.bean;
 
-import java.awt.List;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
